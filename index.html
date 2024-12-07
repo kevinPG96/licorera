@@ -1,0 +1,603 @@
+<html><head><base href="https://estilos"> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Catalogo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+:root {
+    --primary: #1a1a2e;
+    --secondary: #c7a74d;
+    --accent: #e6b325;
+    --text-light: #ffffff;
+    --background-gradient: linear-gradient(135deg, #16222A 0%, #3A6073 100%);
+}
+
+body {
+    background: var(--background-gradient);
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+.welcome-banner {
+    background: rgba(199, 167, 77, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(199, 167, 77, 0.2);
+    border-radius: 15px;
+    margin: 2rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.discount-banner {
+    background: linear-gradient(45deg, #c7a74d, #e6b325);
+    color: #1a1a2e;
+    border-radius: 10px;
+    margin: 2rem;
+    box-shadow: 0 4px 15px rgba(199, 167, 77, 0.3);
+    padding: 1rem;
+    text-align: center;
+}
+
+nav {
+    background: var(--primary);
+    padding: 1rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--secondary);
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.product-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(199, 167, 77, 0.2);
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(199, 167, 77, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+
+.price {
+    color: var(--secondary);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+button {
+    background: var(--secondary);
+    color: var(--primary);
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: var(--accent);
+    transform: scale(1.05);
+}
+
+.cart-modal {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 2rem;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    color: black;
+    overflow-y: auto;
+    border-left: 2px solid var(--secondary);
+}
+
+.cart-modal.active {
+    right: 0;
+}
+
+.cart-items {
+    margin-top: 2rem;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item img {
+    width: 50px;
+    margin-right: 1rem;
+}
+
+.total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.swal2-input {
+    width: 100% !important;
+    margin: 5px 0 !important;
+}
+
+#facturaSimple, #facturaDetallada {
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#facturaSimple:hover, #facturaDetallada:hover {
+    opacity: 0.9;
+}
+
+.despechado-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff4444;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
+    z-index: 1000;
+    animation: pulse 2s infinite;
+    transition: all 0.3s ease;
+}
+
+.despechado-btn:hover {
+    transform: scale(1.05);
+    background: #ff6666;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 68, 68, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+    }
+}
+</style>
+</head>
+<body>
+    <div class="welcome-banner">
+        <h1>¡Bienvenidos a Tequilala!</h1>
+        <p>Descubre nuestra exclusiva selección de bebidas premium</p>
+    </div>
+
+    <div class="discount-banner">
+        <h2>🎉 Oferta del Día 🎉</h2>
+        <p>¡20% de descuento en Whisky Johnny Walker Blue Label!</p>
+        <p>Válido solo por hoy</p>
+    </div>
+
+    <nav>
+        <h1>Producto</h1>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒 <span class="cart-count">0</span>
+        </div>
+    </nav>
+
+    <div class="products" id="products"></div>
+
+    <div class="cart-modal" id="cartModal">
+        <h2>Tu Carrito</h2>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="total" id="total">Total: $0.00</div>
+        <button onclick="checkout()">Finalizar Compra</button>
+    </div>
+
+    <button class="despechado-btn" onclick="showDespechado()">¡Toca aki mij@! 🎁</button>
+
+<script>
+const products = [ //IMAGENES PARA LA SELECCION DE OPCIONES DE COMPRA
+    {
+        id: 1,
+        name: "Whisky Johnny Walker Blue Label",
+        price: 199.99,
+        discountedPrice: 159.99,
+        image: "https://almacenescorsa.com/wp-content/uploads/2021/11/WHISKY-JOHNNIE-WALKER-RED-750-ML.jpg"
+    },
+    {
+        id: 2,
+        name: "Vodka Absolute",
+        price: 49.99,
+        image: "https://www.absolut.com/wp-content/uploads/ingredient_absolut-vodka_1000ml_ROW_packshot.jpg"
+    },
+    {
+        id: 3,
+        name: "Ron russcaya",
+        price: 24.99,
+        image: "https://plazavea.vteximg.com.br/arquivos/ids/29322763-512-512/408462.jpg"
+    },
+    {
+        id: 4,
+        name: "Tequila Charro",
+        price: 15.99,
+        image: "https://bouquet.ec/wp-content/uploads/2024/04/Tequila-El-Charro-Reposado.png"
+    },
+    {
+        id: 5,
+        name: "Marlboro Rojos",
+        price: 6.99,
+        image: "https://maxmarket.ec/wp-content/uploads/2023/11/max-market-24.png"
+    },
+    {
+        id: 6,
+        name: "Agua Mineral Güitig",
+        price: 1.99,
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv-W2TMs1SrpdgeuP7Y0JTq7RsmT6XHm4JDA&s"
+    },
+    {
+          id: 8,
+        name: "Cerveza Club Premium",
+        price: 2.49,
+        image: "https://www.aki.com.ec/retornables/wp-content/uploads/2023/04/club335.jpg"
+    
+    
+    
+    },
+    {
+         id: 8,
+        name: "Whisky premiun",
+        price: 10.49,
+        image: "https://36580daefdd0e4c6740b-4fe617358557d0f7b1aac6516479e176.ssl.cf1.rackcdn.com/products/11794.5026.jpg"
+    
+    }
+];
+
+let cart = [];// BOTON PARA DESPLEHAR OFERTA ESPECIAL EN OCACIONES ESPECIALES
+
+function showDespechado() {
+    Swal.fire({
+        title: '¡OFERTA ESPECIAL! 🎁',
+        html: '<div style="font-size: 1.2em; color: #ff4444; text-shadow: 1px 1px 2px #000;">'+
+              '¿Estás despechad@ o cachud@? <br><br>'+
+              '¡Te regalamos una caja de cigarrillos con tu compra! 🚬</div>',
+        icon: 'info',
+        background: 'linear-gradient(45deg, #ff6b6b, #ff8e8e)',
+        confirmButtonText: '¡Genial!',
+        showConfirmButton: true,
+        confirmButtonColor: '#ff4444',
+        customClass: {
+            popup: 'animated bounceIn'
+        }
+    });
+}//GENERA LA OFERTA ESPECIAL DEL DIA 
+
+function renderProducts() {
+    const productsContainer = document.getElementById('products');
+    productsContainer.innerHTML = products.map(product => `
+        <div class="product-card">
+            <img src="${product.image}" alt="${product.name}" class="product-image">
+            <h3>${product.name}</h3>
+            ${product.id === 1 ? 
+                `<p class="price" style="text-decoration: line-through;">$${product.price.toFixed(2)}</p>
+                 <p class="price" style="color: #27ae60;">$${product.discountedPrice.toFixed(2)} (20% OFF)</p>` :
+                `<p class="price">$${product.price.toFixed(2)}</p>`
+            }
+            <button onclick="addToCart(${product.id})">Añadir al Carrito</button>
+        </div>
+    `).join('');
+}// sirve para generar las comprar (compra de carrito)
+
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    const existingItem = cart.find(item => item.id === productId);
+    const price = product.id === 1 ? product.discountedPrice : product.price;
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ ...product, price, quantity: 1 });
+    }
+
+    updateCartUI();
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartUI();
+}
+
+function updateCartUI() {
+    const cartItems = document.getElementById('cartItems');
+    const cartCount = document.querySelector('.cart-count');
+    const total = document.getElementById('total');
+
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div>
+                <h4>${item.name}</h4>
+                <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+                <button onclick="removeFromCart(${item.id})">Eliminar</button>
+            </div>
+        </div>
+    `).join('');
+
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    total.textContent = `Total: $${totalAmount.toFixed(2)}`;
+}
+
+function toggleCart() {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.toggle('active');
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        Swal.fire('Error', 'Tu carrito está vacío', 'error');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Método de Entrega',
+        html: `
+            <div style="margin: 20px; text-align: center;">
+                <h3 style="margin-bottom: 20px;">¿Cómo deseas recibir tu pedido?</h3>
+                <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+                    <div class="delivery-option" onclick="selectDeliveryOption('delivery')" style="cursor: pointer; padding: 20px; border: 2px solid #c7a74d; border-radius: 10px; width: 45%;">
+                        <i class="fas fa-motorcycle" style="font-size: 2em; color: #c7a74d;"></i>
+                        <h4>Delivery</h4>
+                        <p>Entrega a domicilio</p>
+                        <p style="font-size: 0.8em; color: #666;">Costo adicional: $3.00</p>
+                    </div>
+                    <div class="delivery-option" onclick="selectDeliveryOption('pickup')" style="cursor: pointer; padding: 20px; border: 2px solid #c7a74d; border-radius: 10px; width: 45%;">
+                        <i class="fas fa-store" style="font-size: 2em; color: #c7a74d;"></i>
+                        <h4>Retirar en Local</h4>
+                        <p>Sin costo adicional</p>
+                        <p style="font-size: 0.8em; color: #666;">Disponible en 30 min</p>
+                    </div>
+                </div>
+            </div>
+        `,
+        showConfirmButton: false,
+        showCloseButton: true,
+        background: 'rgba(255, 255, 255, 0.95)',
+        customClass: {
+            container: 'delivery-selection-modal'
+        }
+    });
+}
+
+function selectDeliveryOption(option) {
+    let deliveryAddress = '';
+    if (option === 'delivery') {
+        Swal.fire({
+            title: 'Dirección de Entrega',
+            html: `
+                <div class="form-group">
+                    <input type="text" id="calle" class="swal2-input" placeholder="Calle Principal">
+                    <input type="text" id="numero" class="swal2-input" placeholder="Número de Casa">
+                    <input type="text" id="referencia" class="swal2-input" placeholder="Referencia">
+                    <input type="text" id="telefono" class="swal2-input" placeholder="Teléfono de Contacto">
+                </div>
+            `,
+            confirmButtonText: 'Confirmar Dirección',
+            showCancelButton: true,
+            preConfirm: () => {
+                return {
+                    calle: document.getElementById('calle').value,
+                    numero: document.getElementById('numero').value,
+                    referencia: document.getElementById('referencia').value,
+                    telefono: document.getElementById('telefono').value
+                };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deliveryAddress = result.value;
+                mostrarTipoFactura(option, deliveryAddress);
+            }
+        });
+    } else {
+        mostrarTipoFactura(option);
+    }
+}
+
+function mostrarTipoFactura(deliveryOption, deliveryAddress = null) {
+    Swal.fire({
+        title: 'Tipo de Factura',
+        html: `
+            <div style="margin-bottom: 20px;">
+                <button id="facturaSimple" class="swal2-confirm swal2-styled" style="margin-right: 10px;">Factura Simple</button>
+                <button id="facturaDetallada" class="swal2-confirm swal2-styled">Factura con Datos</button>
+            </div>
+        `,
+        showConfirmButton: false,
+        showCloseButton: true,
+        didOpen: () => {
+            document.getElementById('facturaSimple').addEventListener('click', () => {
+                completarCompraSimple(deliveryOption, deliveryAddress);
+            });
+            document.getElementById('facturaDetallada').addEventListener('click', () => {
+                mostrarFormularioFactura(deliveryOption, deliveryAddress);
+            });
+        }
+    });
+}
+
+function completarCompraSimple(deliveryOption, deliveryAddress) {
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const iva = total * 0.12;
+    const totalConIva = total + iva;
+
+    Swal.fire({
+        title: '¡Compra Exitosa!',
+        html: `
+            <div style="text-align: left; margin: 20px;">
+                <p>Subtotal: $${total.toFixed(2)}</p>
+                <p>IVA (12%): $${iva.toFixed(2)}</p>
+                <p>Total con IVA: $${totalConIva.toFixed(2)}</p>
+                ${deliveryAddress ? `<p>Dirección de Entrega: ${deliveryAddress.calle} ${deliveryAddress.numero}, ${deliveryAddress.referencia}</p>` : ''}
+            </div>
+        `,
+        icon: 'success'
+    });
+
+    cart = [];
+    updateCartUI();
+    toggleCart();
+}
+
+function mostrarFormularioFactura(deliveryOption, deliveryAddress) {
+    Swal.fire({
+        title: 'Datos de Facturación',
+        html: `
+            <form id="facturaForm" style="text-align: left; margin: 20px;">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="tipoId">Tipo de Identificación:</label>
+                    <select id="tipoId" class="swal2-input" required>
+                        <option value="cedula">Cédula</option>
+                        <option value="ruc">RUC</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="numId">Número de Identificación:</label>
+                    <input type="text" id="numId" class="swal2-input" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="nombres">Nombres y Apellidos:</label>
+                    <input type="text" id="nombres" class="swal2-input" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="direccion">Dirección:</label>
+                    <input type="text" id="direccion" class="swal2-input" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" class="swal2-input" required>
+                </div>
+            </form>
+        `,
+        confirmButtonText: 'Confirmar Compra',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const form = document.getElementById('facturaForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+            return {
+                tipoId: document.getElementById('tipoId').value,
+                numId: document.getElementById('numId').value,
+                nombres: document.getElementById('nombres').value,
+                direccion: document.getElementById('direccion').value,
+                email: document.getElementById('email').value,
+                deliveryOption,
+                deliveryAddress
+            };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            enviarFacturaEmail(result.value);
+        }
+    });
+}
+
+function enviarFacturaEmail(datosCliente) {
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const iva = total * 0.12;
+    const totalConIva = total + iva;
+
+    Swal.fire({
+        title: '¡Compra Exitosa!',
+        html: `
+            <div style="text-align: left; margin: 20px;">
+                <p>Se ha enviado la factura al correo: ${datosCliente.email}</p>
+                <p>Datos de facturación:</p>
+                <p>${datosCliente.tipoId}: ${datosCliente.numId}</p>
+                <p>Nombre: ${datosCliente.nombres}</p>
+                <p>Dirección: ${datosCliente.direccion}</p>
+                ${datosCliente.deliveryOption === 'delivery' ? `<p>Dirección de Entrega: ${datosCliente.deliveryAddress.calle} ${datosCliente.deliveryAddress.numero}, ${datosCliente.deliveryAddress.referencia}</p>` : ''}
+                <hr>
+                <p>Subtotal: $${total.toFixed(2)}</p>
+                <p>IVA (12%): $${iva.toFixed(2)}</p>
+                <p>Total con IVA: $${totalConIva.toFixed(2)}</p>
+            </div>
+        `,
+        icon: 'success'
+    });
+
+    cart = [];
+    updateCartUI();
+    toggleCart();
+}
+
+// Inicializar la tienda
+renderProducts();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
